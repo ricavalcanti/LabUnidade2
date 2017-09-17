@@ -7,7 +7,7 @@ public class CalcRPN {
 	Pilha<Double> aPilha;
 	
 	CalcRPN () {
-		aPilha = new Pilha();
+		aPilha = new Pilha<Double>();
 	}
 	
 	void mais() {
