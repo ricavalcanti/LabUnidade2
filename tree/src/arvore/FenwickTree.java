@@ -57,30 +57,6 @@ public class FenwickTree {
 		}
 		return leftSize + right.size();
 	}
-
-	public static void main(String[] args) {
-		// teste de correcao
-		System.out.println("Verificacao de correcao da funcao...");
-		FenwickTree T = new FenwickTree(3, new FenwickTree(1,
-				new FenwickTree(0), new FenwickTree(1, new FenwickTree(0),
-						new FenwickTree(0))), new FenwickTree(1,
-				new FenwickTree(0), new FenwickTree(1, new FenwickTree(0),
-						new FenwickTree(0))));
-		System.out.println("Arvore this : " + T);
-		T.increment(0, 4);
-		System.out.println("Resultado de increment(0, 4) : " + T);
-		T.increment(1, 2);
-		System.out.println("Resultado de increment(1, 2) : " + T);
-		T.increment(2, 5);
-		System.out.println("Resultado de increment(2, 5) : " + T);
-		T.increment(3, 3);
-		System.out.println("Resultado de increment(3, 3) : " + T);
-		T.increment(4, 6);
-		System.out.println("Resultado de increment(4, 6) : " + T);
-		T.increment(5, 1);
-		System.out.println("Resultado de increment(5, 1) : " + T);
-	}
-
 	public void increment(int i, int delta) {
 		value += delta;
 		if (leftSize == 0)
@@ -91,5 +67,47 @@ public class FenwickTree {
 			right.increment(i - leftSize, delta);
 		}
 	}
+	
+    public int prefixSum(int upto) {
+        if (upto == 0 && right == null && left == null) {
+            return 0;
+        }
+        if (right == null && left == null) {
+            return value;
+        }
+
+        if (upto >= leftSize) {
+            return (value - right.value) + right.prefixSum(upto-leftSize);
+        } else {
+            return left.prefixSum(upto);
+        }
+    }
+    
+    public int between(int lo, int hi) {
+        return prefixSum(hi) - prefixSum(lo);
+    }
+
+
+	public static void main(String[] args) {
+		FenwickTree T = new FenwickTree(3, new FenwickTree(1, new FenwickTree(4),
+				new FenwickTree(1, new FenwickTree(2), new FenwickTree(5))),
+				new FenwickTree(1, new FenwickTree(3),
+				new FenwickTree(1, new FenwickTree(6), new FenwickTree(1))));
+				System.out.println("Arvore this : " + T);
+				System.out.println("Soma das folhas entre lo e hi : ");
+				System.out.print(" ");
+				for(int lo = 0; lo <= 6; lo++)
+				System.out.print("lo = " + lo + " ");
+				System.out.println();
+				for(int hi = 0; hi <= 6; hi++){
+				System.out.print("hi = " + hi + " ");
+				for(int lo = 0; lo <= hi; lo++){
+				System.out.print(T.between(lo, hi) + " ");
+				if(T.between(lo, hi) < 10) System.out.print(" ");
+				}
+				System.out.println();
+	}
+}
+
 
 }
